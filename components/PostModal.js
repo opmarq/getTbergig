@@ -16,6 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { gql, useMutation } from "@apollo/client";
 
+import { getPosts } from "../pages";
+
 const addPostMutation = gql`
   mutation AddPost($content: String!) {
     insert_posts_one(object: { content: $content }) {
@@ -30,26 +32,30 @@ const addPostMutation = gql`
 export const PostModal = ({ isOpen, onClose }) => {
   const [post, setPost] = useState("");
 
-  const [addPost, { data, loading, error }] = useMutation(addPostMutation, {
-    update(cache, { data: { insert_posts_one } }) {
-      cache.modify({
-        fields: {
-          todos(existingPosts = []) {
-            const newPostRef = cache.writeFragment({
-              data: insert_posts_one,
-              fragment: gql`
-                fragment NewPost on Post {
-                  id
-                  content
-                }
-              `,
-            });
-            return [...existingPosts, newPostRef];
+  const [addPost, { data, loading, error, refetch }] = useMutation(
+    addPostMutation,
+    {
+      update(cache, { data: { insert_posts_one } }) {
+        cache.modify({
+          fields: {
+            todos(existingPosts = []) {
+              const newPostRef = cache.writeFragment({
+                data: insert_posts_one,
+                fragment: gql`
+                  fragment NewPost on Post {
+                    id
+                    content
+                  }
+                `,
+              });
+              return [...existingPosts, newPostRef];
+            },
           },
-        },
-      });
-    },
-  });
+        });
+      },
+      refetchQueries: [{ query: getPosts }],
+    }
+  );
 
   return (
     <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>

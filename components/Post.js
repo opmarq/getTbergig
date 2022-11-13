@@ -15,6 +15,8 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { gql, useMutation } from "@apollo/client";
 
+import { getPosts } from "../pages";
+
 const deletePostMutation = gql`
   mutation DeletePost($id: Int!) {
     delete_posts_by_pk(id: $id) {
@@ -24,8 +26,10 @@ const deletePostMutation = gql`
 `;
 
 export const Post = ({ children, id }) => {
-  const [deletePost, { data, loading, error }] =
-    useMutation(deletePostMutation);
+  const [deletePost, { data, loading, error }] = useMutation(
+    deletePostMutation,
+    { refetchQueries: [{ query: getPosts }] }
+  );
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   return (

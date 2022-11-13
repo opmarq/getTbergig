@@ -2,13 +2,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
 
 import { client } from "../utils/apollo-client";
+import { PostsProvider } from "../components/PostsContext";
 
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider>
-      <ApolloProvider client={client}>
-        <Component {...pageProps} />
-      </ApolloProvider>
+      <PostsProvider>
+        <ApolloProvider client={client}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </PostsProvider>
     </ChakraProvider>
   );
 }
