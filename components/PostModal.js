@@ -29,7 +29,27 @@ const addPostMutation = gql`
 
 export const PostModal = ({ isOpen, onClose }) => {
   const [post, setPost] = useState("");
-  const [addPost, { data, loading, error }] = useMutation(addPostMutation);
+
+  const [addPost, { data, loading, error }] = useMutation(addPostMutation, {
+    update(cache, { data: { insert_posts_one } }) {
+      cache.modify({
+        fields: {
+          todos(existingPosts = []) {
+            const newPostRef = cache.writeFragment({
+              data: insert_posts_one,
+              fragment: gql`
+                fragment NewPost on Post {
+                  id
+                  content
+                }
+              `,
+            });
+            return [...existingPosts, newPostRef];
+          },
+        },
+      });
+    },
+  });
 
   return (
     <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>

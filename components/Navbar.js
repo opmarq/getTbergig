@@ -7,11 +7,10 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuDivider,
   useColorModeValue,
   Stack,
   useColorMode,
-  Center,
+  Heading,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
@@ -21,14 +20,16 @@ export const Nav = () => {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>tbergig</Box>
-
+          <Box>
+            <Heading size="xl" fontFamily="Shadows Into Light">
+              Tbergig
+            </Heading>
+          </Box>
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-
               <Menu>
                 <MenuButton
                   as={Button}
@@ -43,21 +44,8 @@ export const Nav = () => {
                   />
                 </MenuButton>
                 <MenuList alignItems={"center"}>
-                  <br />
-                  <Center>
-                    <Avatar
-                      size={"2xl"}
-                      src={"https://avatars.dicebear.com/api/male/username.svg"}
-                    />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
+                  <MenuItem>Dashboard</MenuItem>
+                  <MenuItem>Settings</MenuItem>
                   <MenuItem>Logout</MenuItem>
                 </MenuList>
               </Menu>

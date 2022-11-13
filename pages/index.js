@@ -1,13 +1,19 @@
 import Head from "next/head";
-import { Box, Container, Stack, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Spinner,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
 import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
 import { PostModal } from "../components/PostModal";
 
-const getPosts = gql`
-  query MyQuery {
+export const getPosts = gql`
+  query getPosts {
     posts {
       content
       likes
@@ -52,7 +58,9 @@ export default function Home() {
           </Stack>
           <Stack as={Box} spacing="24px" textAlign={"center"} py="10">
             {loading ? (
-              "loading"
+              <Box p="5">
+                <Spinner />
+              </Box>
             ) : (
               <>
                 {data.posts.map((post) => {
