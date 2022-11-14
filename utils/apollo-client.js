@@ -1,11 +1,48 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 
-export const client = new ApolloClient({
-  uri: "https://healthy-frog-18.hasura.app/v1/graphql",
-  headers: {
-    "x-hasura-admin-secret":
-      "RkXzAkIrEy1wcgGet0vdbyLUVb2552WM4ZKfkNj0kuLPPzTNAZKXPu3ie9rZ97Ey",
-    "content-type": "application/json",
-  },
-  cache: new InMemoryCache(),
-});
+const headers = {
+  "x-hasura-admin-secret":
+    "RkXzAkIrEy1wcgGet0vdbyLUVb2552WM4ZKfkNj0kuLPPzTNAZKXPu3ie9rZ97Ey",
+  "content-type": "application/json",
+};
+
+const URL = "https://healthy-frog-18.hasura.app/v1/graphql";
+const URI = "wss://healthy-frog-18.hasura.app/v1/graphql";
+
+const createHttpLink = () => {
+  const httpLink = new HttpLink({
+    uri: URL,
+    credentials: "include",
+    headers,
+  });
+  return httpLink;
+};
+
+const createWSLink = () => {
+  return new WebSocketLink(
+    new SubscriptionClient(URI, {
+      lazy: true,
+      reconnect: true,
+      connectionParams: {
+        headers,
+      },
+    })
+  );
+};
+
+export function createApolloClient() {
+  const ssrMode = typeof window === "undefined";
+  let link;
+  if (ssrMode) {
+    link = createHttpLink();
+  } else {
+    link = createWSLink();
+  }
+  return new ApolloClient({
+    ssrMode,
+    link,
+    cache: new InMemoryCache(),
+  });
+}
