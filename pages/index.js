@@ -37,7 +37,7 @@ export default function Wall() {
       </Head>
       <main>
         <Nav />
-        <Container maxW={"3xl"} py="10">
+        <Container maxW={"3xl"} py="5">
           <Stack as={Box} textAlign={"center"}>
             <Box
               borderRadius="xl"
