@@ -7,6 +7,7 @@ import {
   useDisclosure,
   Text,
   Button,
+  Wrap,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
@@ -58,7 +59,7 @@ export default function Wall() {
               </Box>
             </Box>
           </Stack>
-          <Stack py="5" spacing={4} direction="row" align="center">
+          <Wrap py="5" spacing={4} direction="row" align="center">
             <Button colorScheme="blue" href="#" size="sm">
               #gabriel
             </Button>
@@ -68,7 +69,25 @@ export default function Wall() {
             <Button colorScheme="blue" size="sm">
               #maghariba3ilmaniyon
             </Button>
-          </Stack>
+            <Button colorScheme="blue" href="#" size="sm">
+              #gabriel
+            </Button>
+            <Button colorScheme="blue" size="sm">
+              #sex
+            </Button>
+            <Button colorScheme="blue" size="sm">
+              #maghariba3ilmaniyon
+            </Button>
+            <Button colorScheme="blue" href="#" size="sm">
+              #gabriel
+            </Button>
+            <Button colorScheme="blue" size="sm">
+              #sex
+            </Button>
+            <Button colorScheme="blue" size="sm">
+              #maghariba3ilmaniyon
+            </Button>
+          </Wrap>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
             {data?.posts.length === 0 && <Text>No tbergig yet!</Text>}
             {loading ? (
