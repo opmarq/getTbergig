@@ -61,7 +61,7 @@ export const PostModal = ({ isOpen, onClose }) => {
     <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Khwi alina qlbek!!</ModalHeader>
+        <ModalHeader>What do you want to say?</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Textarea
