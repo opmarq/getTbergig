@@ -13,6 +13,13 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import Select from "react-select";
+
+const options = [
+  { value: "clubhouse-maroc", label: "Clubhouse Maroc" },
+  { value: "morocco", label: "Morocco" },
+  { value: "jmap", label: "JMAP" },
+];
 
 export const Nav = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -20,11 +27,18 @@ export const Nav = () => {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>
-            <Heading size="xl" fontFamily="Shadows Into Light">
-              Tbergig
-            </Heading>
-          </Box>
+          <Flex alignItems="center" gap="10">
+            <Heading size="md">Tbergig</Heading>
+            <span>/</span>
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              defaultValue={options[0]}
+              isSearchable={true}
+              name="wall"
+              options={options}
+            />
+          </Flex>
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               <Button onClick={toggleColorMode}>

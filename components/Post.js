@@ -11,6 +11,11 @@ import {
   IconButton,
   useDisclosure,
   Flex,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  HStack,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { gql, useMutation } from "@apollo/client";
