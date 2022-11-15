@@ -5,7 +5,7 @@ import { ChevronUpIcon, ChevronDownIcon } from "@chakra-ui/icons";
 export const Vote = () => {
   const [likes, setLikes] = useState(0);
   return (
-    <Box>
+    <Box userSelect="none">
       <IconButton
         onClick={() => {
           setLikes(likes + 1);
