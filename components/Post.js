@@ -40,9 +40,6 @@ export const Post = ({ children, id }) => {
 
   return (
     <Flex>
-      <Box pr="2">
-        <Vote />
-      </Box>
       <Box
         boxShadow={"lg"}
         borderRadius="xl"
@@ -108,6 +105,9 @@ export const Post = ({ children, id }) => {
         <Text textAlign="left" color="#ffffff">
           {children}
         </Text>
+      </Box>
+      <Box pl="2">
+        <Vote />
       </Box>
     </Flex>
   );

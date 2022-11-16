@@ -11,6 +11,7 @@ export const Vote = () => {
           setLikes(likes + 1);
         }}
         icon={<ChevronUpIcon />}
+        size="sm"
       />
       <Box py="2">{likes}</Box>
       <IconButton
@@ -18,6 +19,7 @@ export const Vote = () => {
         onClick={() => {
           setLikes(likes - 1);
         }}
+        size="sm"
       />
     </Box>
   );
