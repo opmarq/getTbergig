@@ -11,11 +11,7 @@ import {
   IconButton,
   useDisclosure,
   Flex,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  HStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { gql, useMutation } from "@apollo/client";
@@ -47,7 +43,7 @@ export const Post = ({ children, id }) => {
         pb="10px"
         pl="20px"
         pr="5px"
-        backgroundColor="#232526"
+        bg={useColorModeValue("white", "gray.900")}
         w="full"
       >
         <Flex justifyContent="end">
@@ -102,9 +98,7 @@ export const Post = ({ children, id }) => {
             </Popover>
           </Flex>
         </Flex>
-        <Text textAlign="left" color="#ffffff">
-          {children}
-        </Text>
+        <Text textAlign="left">{children}</Text>
       </Box>
       <Box pl="2">
         <Vote />

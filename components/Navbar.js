@@ -30,6 +30,9 @@ export const Nav = () => {
               <option value="morocco">Morocco</option>
             </Select>
           </Flex>
+          <Button onClick={toggleColorMode}>
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
           {/* <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               <Menu>

@@ -6,8 +6,8 @@ import {
   Stack,
   useDisclosure,
   Text,
-  Button,
-  Wrap,
+  Badge,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
@@ -44,50 +44,49 @@ export default function Wall() {
               borderRadius="xl"
               py="30px"
               px="15px"
-              backgroundColor="#232526"
+              boxShadow={"lg"}
+              bg={useColorModeValue("white", "gray.900")}
             >
               <Box
                 borderRadius="2xl"
                 p="10px"
-                backgroundColor="#3A3B3D"
-                color="#ABAEB3"
+                bg={useColorModeValue("white", "#3A3B3D")}
                 textAlign="left"
                 cursor="pointer"
                 onClick={onOpen}
+                border="1px"
+                borderColor={useColorModeValue("gray.900", "#3A3B3D")}
               >
                 What do you want to say?
               </Box>
             </Box>
           </Stack>
-          <Wrap py="5" spacing={4} direction="row" align="center">
-            <Button colorScheme="blue" href="#" size="sm">
+          <Stack direction={"row"} my={6}>
+            <Badge
+              px={2}
+              py={1}
+              bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+            >
               #gabriel
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #sex
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #maghariba3ilmaniyon
-            </Button>
-            <Button colorScheme="blue" href="#" size="sm">
-              #gabriel
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #sex
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #maghariba3ilmaniyon
-            </Button>
-            <Button colorScheme="blue" href="#" size="sm">
-              #gabriel
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #sex
-            </Button>
-            <Button colorScheme="blue" size="sm">
-              #maghariba3ilmaniyon
-            </Button>
-          </Wrap>
+            </Badge>
+            <Badge
+              px={2}
+              py={1}
+              bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+            >
+              #redpill
+            </Badge>
+            <Badge
+              px={2}
+              py={1}
+              bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+            >
+              #sexologie
+            </Badge>
+          </Stack>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
             {data?.posts.length === 0 && <Text>No tbergig yet!</Text>}
             {loading ? (
