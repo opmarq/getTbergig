@@ -8,6 +8,7 @@ import {
   Text,
   Badge,
   useColorModeValue,
+  Button,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
@@ -62,30 +63,15 @@ export default function Wall() {
             </Box>
           </Stack>
           <Stack direction={"row"} my={6}>
-            <Badge
-              px={2}
-              py={1}
-              bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-            >
+            <Button px={2} py={1} fontWeight={"400"} size="sm">
               #gabriel
-            </Badge>
-            <Badge
-              px={2}
-              py={1}
-              bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-            >
+            </Button>
+            <Button px={2} py={1} fontWeight={"400"} size="sm">
               #redpill
-            </Badge>
-            <Badge
-              px={2}
-              py={1}
-              bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-            >
+            </Button>
+            <Button px={2} py={1} fontWeight={"400"} size="sm">
               #sexologie
-            </Badge>
+            </Button>
           </Stack>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
             {data?.posts.length === 0 && <Text>No tbergig yet!</Text>}
