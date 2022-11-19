@@ -21,7 +21,7 @@ export const Nav = () => {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Flex alignItems="center" gap="5">
+          <Flex alignItems="center" gap="2">
             <Heading size="md">Tbergig</Heading>
             <span>/</span>
             <Select>
