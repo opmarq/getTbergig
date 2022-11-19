@@ -32,30 +32,26 @@ const addPostMutation = gql`
 export const PostModal = ({ isOpen, onClose }) => {
   const [post, setPost] = useState("");
 
-  const [addPost, { data, loading, error, refetch }] = useMutation(
-    addPostMutation,
-    {
-      update(cache, { data: { insert_posts_one } }) {
-        cache.modify({
-          fields: {
-            todos(existingPosts = []) {
-              const newPostRef = cache.writeFragment({
-                data: insert_posts_one,
-                fragment: gql`
-                  fragment NewPost on Post {
-                    id
-                    content
-                  }
-                `,
-              });
-              return [...existingPosts, newPostRef];
-            },
+  const [addPost] = useMutation(addPostMutation, {
+    update(cache, { data: { insert_posts_one } }) {
+      cache.modify({
+        fields: {
+          posts(existingPosts = []) {
+            const newPostRef = cache.writeFragment({
+              data: insert_posts_one,
+              fragment: gql`
+                fragment NewPost on Post {
+                  id
+                  content
+                }
+              `,
+            });
+            return [...existingPosts, newPostRef];
           },
-        });
-      },
-      refetchQueries: [{ query: getPosts }],
-    }
-  );
+        },
+      });
+    },
+  });
 
   return (
     <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
@@ -76,7 +72,18 @@ export const PostModal = ({ isOpen, onClose }) => {
             colorScheme="blue"
             onClick={() => {
               onClose();
-              addPost({ variables: { content: post } });
+              addPost({
+                variables: { content: post },
+                optimisticResponse: {
+                  insert_posts_one: {
+                    __typename: "posts",
+                    content: post,
+                    likes: 0,
+                    id: 111,
+                    created_at: "2022-11-19T17:55:56.960641+00:00",
+                  },
+                },
+              });
             }}
           >
             Send

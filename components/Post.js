@@ -40,11 +40,22 @@ const voteMutation = gql`
 `;
 
 export const Post = ({ children, likes, id }) => {
-  const [deletePost, { data, loading, error }] = useMutation(
-    deletePostMutation
-    // { refetchQueries: [{ query: getPosts }] }
-  );
 
+  const [deletePost] = useMutation(deletePostMutation, {
+    update: (store, { data: { delete_posts_by_pk } }) => {
+      const data = store.readQuery({
+        query: getPosts,
+        variables: { id: id },
+      });
+      const posts = data.posts.filter(
+        (post) => post.id !== delete_posts_by_pk.id
+      );
+      store.writeQuery({
+        query: getPosts,
+        data: { posts: posts },
+      });
+    },
+  });
   const [vote] = useMutation(voteMutation);
 
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -94,19 +105,6 @@ export const Post = ({ children, likes, id }) => {
                         onClose();
                         deletePost({
                           variables: { id },
-                          update: (store, { data: { delete_posts_by_pk } }) => {
-                            const data = store.readQuery({
-                              query: getPosts,
-                              variables: { id: id },
-                            });
-                            const posts = data.posts.filter(
-                              (post) => post.id !== delete_posts_by_pk.id
-                            );
-                            store.writeQuery({
-                              query: getPosts,
-                              data: { posts: posts },
-                            });
-                          },
                           optimisticResponse: {
                             delete_posts_by_pk: {
                               id,

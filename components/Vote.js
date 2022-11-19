@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, IconButton } from "@chakra-ui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@chakra-ui/icons";
 
