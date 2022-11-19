@@ -27,11 +27,26 @@ const deletePostMutation = gql`
   }
 `;
 
-export const Post = ({ children, id }) => {
+const voteMutation = gql`
+  mutation Vote($id: Int!, $likes: numeric) {
+    update_posts_by_pk(pk_columns: { id: $id }, _inc: { likes: $likes }) {
+      approved
+      content
+      created_at
+      id
+      likes
+    }
+  }
+`;
+
+export const Post = ({ children, likes, id }) => {
   const [deletePost, { data, loading, error }] = useMutation(
-    deletePostMutation,
-    { refetchQueries: [{ query: getPosts }] }
+    deletePostMutation
+    // { refetchQueries: [{ query: getPosts }] }
   );
+
+  const [vote] = useMutation(voteMutation);
+
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   return (
@@ -77,7 +92,28 @@ export const Post = ({ children, id }) => {
                       fontSize="sm"
                       onClick={() => {
                         onClose();
-                        deletePost({ variables: { id } });
+                        deletePost({
+                          variables: { id },
+                          update: (store, { data: { delete_posts_by_pk } }) => {
+                            const data = store.readQuery({
+                              query: getPosts,
+                              variables: { id: id },
+                            });
+                            const posts = data.posts.filter(
+                              (post) => post.id !== delete_posts_by_pk.id
+                            );
+                            store.writeQuery({
+                              query: getPosts,
+                              data: { posts: posts },
+                            });
+                          },
+                          optimisticResponse: {
+                            delete_posts_by_pk: {
+                              id,
+                              __typename: "posts",
+                            },
+                          },
+                        });
                       }}
                     >
                       Delete
@@ -101,7 +137,24 @@ export const Post = ({ children, id }) => {
         <Text textAlign="left">{children}</Text>
       </Box>
       <Box pl="2">
-        <Vote />
+        <Vote
+          onVote={(votes) => {
+            vote({
+              variables: { id, likes: votes },
+              optimisticResponse: {
+                update_posts_by_pk: {
+                  approved: true,
+                  content: children,
+                  created_at: "2022-11-15T22:55:51.330032+00:00",
+                  id: id,
+                  likes: likes + votes,
+                  __typename: "posts",
+                },
+              },
+            });
+          }}
+          votes={likes}
+        />
       </Box>
     </Flex>
   );

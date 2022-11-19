@@ -83,7 +83,7 @@ export default function Wall() {
               <>
                 {data.posts.map((post) => {
                   return (
-                    <Post id={post.id} key={post.id}>
+                    <Post likes={post.likes} id={post.id} key={post.id}>
                       {post.content}
                     </Post>
                   );

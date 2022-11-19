@@ -2,22 +2,21 @@ import { useState } from "react";
 import { Box, IconButton } from "@chakra-ui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@chakra-ui/icons";
 
-export const Vote = () => {
-  const [likes, setLikes] = useState(0);
+export const Vote = ({ onVote, votes }) => {
   return (
     <Box userSelect="none">
       <IconButton
         onClick={() => {
-          setLikes(likes + 1);
+          onVote(1);
         }}
         icon={<ChevronUpIcon />}
         size="sm"
       />
-      <Box py="2">{likes}</Box>
+      <Box py="2">{votes}</Box>
       <IconButton
         icon={<ChevronDownIcon />}
         onClick={() => {
-          setLikes(likes - 1);
+          onVote(-1);
         }}
         size="sm"
       />
