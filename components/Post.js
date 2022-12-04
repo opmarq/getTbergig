@@ -14,10 +14,12 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import ReactHashtag from "react-hashtag";
 import { gql, useMutation } from "@apollo/client";
 
 import { getPosts } from "../pages";
 import { Vote } from "./Vote";
+import Link from "next/link";
 
 const deletePostMutation = gql`
   mutation DeletePost($id: Int!) {
@@ -40,7 +42,6 @@ const voteMutation = gql`
 `;
 
 export const Post = ({ children, likes, id }) => {
-
   const [deletePost] = useMutation(deletePostMutation, {
     update: (store, { data: { delete_posts_by_pk } }) => {
       const data = store.readQuery({
@@ -132,7 +133,18 @@ export const Post = ({ children, likes, id }) => {
             </Popover>
           </Flex>
         </Flex>
-        <Text textAlign="left">{children}</Text>
+        <Text textAlign="left">
+          <ReactHashtag
+            renderHashtag={(hashtagValue, index) => (
+              <Link key={index} href={hashtagValue}>
+                {hashtagValue}
+              </Link>
+            )}
+            onHashtagClick={(val) => console.log(val)}
+          >
+            {children}
+          </ReactHashtag>
+        </Text>
       </Box>
       <Box pl="2">
         <Vote

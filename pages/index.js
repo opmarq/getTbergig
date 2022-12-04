@@ -7,7 +7,6 @@ import {
   useDisclosure,
   Text,
   useColorModeValue,
-  Button,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
@@ -28,7 +27,7 @@ export const getPosts = gql`
 `;
 
 export default function Wall() {
-  const { data: dataPosts, loadingPosts } = useQuery(getPosts);
+  const { data: dataPosts, loading: loadingPosts } = useQuery(getPosts);
   const { posts } = dataPosts || { posts: [] };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -66,7 +65,9 @@ export default function Wall() {
           </Stack>
           <HashTags />
           <Stack as={Box} spacing="24px" textAlign={"center"}>
-            {posts.length === 0 && <Text>No tbergig yet!</Text>}
+            {posts.length === 0 && !loadingPosts && (
+              <Text>No tbergig yet!</Text>
+            )}
             {loadingPosts ? (
               <Box p="5">
                 <Spinner />
