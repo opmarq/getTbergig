@@ -6,7 +6,6 @@ import {
   Stack,
   useDisclosure,
   Text,
-  Badge,
   useColorModeValue,
   Button,
 } from "@chakra-ui/react";
@@ -15,6 +14,7 @@ import { gql, useQuery } from "@apollo/client";
 import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
 import { PostModal } from "../components/PostModal";
+import { HashTags } from "../components/HashTags";
 
 export const getPosts = gql`
   query getPosts {
@@ -28,7 +28,9 @@ export const getPosts = gql`
 `;
 
 export default function Wall() {
-  const { data, loading, error } = useQuery(getPosts);
+  const { data: dataPosts, loadingPosts } = useQuery(getPosts);
+  const { posts } = dataPosts || { posts: [] };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -62,26 +64,16 @@ export default function Wall() {
               </Box>
             </Box>
           </Stack>
-          <Stack direction={"row"} my={6}>
-            <Button px={2} py={1} fontWeight={"400"} size="sm">
-              #gabriel
-            </Button>
-            <Button px={2} py={1} fontWeight={"400"} size="sm">
-              #redpill
-            </Button>
-            <Button px={2} py={1} fontWeight={"400"} size="sm">
-              #sexologie
-            </Button>
-          </Stack>
+          <HashTags />
           <Stack as={Box} spacing="24px" textAlign={"center"}>
-            {data?.posts.length === 0 && <Text>No tbergig yet!</Text>}
-            {loading ? (
+            {posts.length === 0 && <Text>No tbergig yet!</Text>}
+            {loadingPosts ? (
               <Box p="5">
                 <Spinner />
               </Box>
             ) : (
               <>
-                {data.posts.map((post) => {
+                {posts.map((post) => {
                   return (
                     <Post likes={post.likes} id={post.id} key={post.id}>
                       {post.content}
