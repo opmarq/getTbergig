@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, useColorModeValue } from "@chakra-ui/react";
 
 const config = {
   initialColorMode: "dark",
@@ -7,13 +7,13 @@ const config = {
     Modal: {
       baseStyle: (props) => ({
         dialog: {
-          bg: "#000000",
+          bg: useColorModeValue("white", "gray.900"),
         },
       }),
     },
   },
 };
 
-const theme = extendTheme({ config });
+const theme = extendTheme({ ...config });
 
 export default theme;

@@ -69,7 +69,15 @@ export const PostModal = ({ isOpen, onClose }) => {
   });
 
   return (
-    <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{
+        xs: "full",
+        md: "lg",
+      }}
+      blockScrollOnMount={false}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>What do you want to say?</ModalHeader>
