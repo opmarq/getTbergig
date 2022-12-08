@@ -20,6 +20,12 @@ import { CommentsModal } from "../components/commentsModal";
 export const getPosts = gql`
   query getPosts {
     posts {
+      comments {
+        content
+        likes
+        id
+        created_at
+      }
       content
       likes
       id
@@ -31,13 +37,14 @@ export const getPosts = gql`
 export default function Wall() {
   const { data: dataPosts, loading: loadingPosts } = useQuery(getPosts);
   const { posts } = dataPosts || { posts: [] };
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     isOpen: isCommentOpen,
     onOpen: onOpenComment,
     onClose: onCloseComment,
   } = useDisclosure();
+
   const [postId, setPostId] = useState();
 
   return (
@@ -87,6 +94,7 @@ export default function Wall() {
                     <Post
                       createdAt={post.created_at}
                       likes={post.likes}
+                      comments={post.comments.length}
                       id={post.id}
                       key={post.id}
                       onClick={(id) => {

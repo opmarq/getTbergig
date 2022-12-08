@@ -52,6 +52,7 @@ export const Post = ({
   id,
   createdAt,
   onClick,
+  comments,
   headless = false,
 }) => {
   const [deletePost] = useMutation(deletePostMutation, {
@@ -93,7 +94,7 @@ export const Post = ({
             isOpen={isOpen}
             onClose={onClose}
             onOpen={onOpen}
-            placement="bottom"
+            placement="left"
             isLazy
           >
             <PopoverTrigger>
@@ -200,7 +201,7 @@ export const Post = ({
           variant="ghost"
           leftIcon={<BiChat />}
         >
-          0
+          {comments}
         </Button>
         <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
           Share

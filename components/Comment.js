@@ -46,6 +46,7 @@ const voteMutation = gql`
 `;
 
 export const Comment = ({ children, likes, id, createdAt }) => {
+
   const [deletePost] = useMutation(deletePostMutation, {
     update: (store, { data: { delete_posts_by_pk } }) => {
       const data = store.readQuery({
@@ -61,6 +62,7 @@ export const Comment = ({ children, likes, id, createdAt }) => {
       });
     },
   });
+
   const [vote] = useMutation(voteMutation);
 
   const { onOpen, onClose, isOpen } = useDisclosure();

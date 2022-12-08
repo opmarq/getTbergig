@@ -9,7 +9,9 @@ import {
   Button,
   Textarea,
   Divider,
-  Spinner,
+  Stack,
+  Skeleton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
@@ -17,17 +19,13 @@ import { Post } from "./Post";
 import { Comment } from "./Comment";
 
 const AddCommentMutation = gql`
-  mutation AddPost(
-    $content: String = ""
-    $data: [post_hashtag_insert_input!] = {}
-  ) {
-    insert_posts_one(
-      object: { content: $content, post_hashtags: { data: $data } }
-    ) {
-      content
-      likes
+  mutation addComment($content: String = "", $post_id: Int = 10) {
+    insert_comments_one(object: { content: $content, post_id: $post_id }) {
       id
+      likes
       created_at
+      content
+      post_id
     }
   }
 `;
@@ -35,6 +33,12 @@ const AddCommentMutation = gql`
 export const GetPostQuery = gql`
   query GetPost($id: Int!) {
     posts_by_pk(id: $id) {
+      comments {
+        content
+        likes
+        id
+        created_at
+      }
       content
       id
       likes
@@ -45,7 +49,7 @@ export const GetPostQuery = gql`
 
 export const CommentsModal = ({ isOpen, onClose, postId }) => {
   const {
-    data: { posts_by_pk: post } = { posts_by_pk: {} },
+    data: { posts_by_pk: post } = { posts_by_pk: { comments: [] } },
     loading: loadingPost,
   } = useQuery(GetPostQuery, {
     variables: {
@@ -55,26 +59,41 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
 
   const [comment, setComment] = useState("");
 
-  // const [addPost] = useMutation(AddCommentMutation, {
-  //   update(cache, { data: { insert_posts_one } }) {
-  //     cache.modify({
-  //       fields: {
-  //         posts(existingPosts = []) {
-  //           const newPostRef = cache.writeFragment({
-  //             data: insert_posts_one,
-  //             fragment: gql`
-  //               fragment NewPost on Post {
-  //                 id
-  //                 content
-  //               }
-  //             `,
-  //           });
-  //           return [...existingPosts, newPostRef];
-  //         },
-  //       },
-  //     });
-  //   },
-  // });
+  const [addComment] = useMutation(AddCommentMutation, {
+    onCompleted() {
+      setComment("");
+    },
+    update(cache, { data: { insert_posts_one } }) {
+      cache.modify({
+        fields: {
+          comments(existingComments = []) {
+            const newCommentsRef = cache.writeFragment({
+              data: insert_posts_one,
+              fragment: gql`
+                fragment NewPost on Comment {
+                  id
+                  content
+                }
+              `,
+            });
+            return [...existingComments, newCommentsRef];
+          },
+        },
+      });
+    },
+  });
+
+  const onEnterPress = (e) => {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      addComment({
+        variables: {
+          content: comment,
+          post_id: postId,
+        },
+      });
+    }
+  };
 
   return (
     <Modal
@@ -92,7 +111,28 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
         <ModalCloseButton />
         <ModalBody>
           {loadingPost ? (
-            <Spinner />
+            <Stack my="5">
+              <Skeleton
+                borderRadius="lg"
+                startColor={useColorModeValue("white", "#3A3B3D")}
+                height="20px"
+              />
+              <Skeleton
+                borderRadius="lg"
+                startColor={useColorModeValue("white", "#3A3B3D")}
+                height="20px"
+              />
+              <Skeleton
+                borderRadius="lg"
+                startColor={useColorModeValue("white", "#3A3B3D")}
+                height="20px"
+              />
+              <Skeleton
+                borderRadius="lg"
+                startColor={useColorModeValue("white", "#3A3B3D")}
+                height="20px"
+              />
+            </Stack>
           ) : (
             <Post
               likes={post.likes}
@@ -109,28 +149,20 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
             onChange={(e) => {
               setComment(e.target.value);
             }}
+            onKeyDown={onEnterPress}
           />
-          <Comment
-            likes={10}
-            createdAt="Thu Dec 08 2022 13:57:19 GMT+0100 (Central European Standard Time)"
-            id={1}
-          >
-            Irure laboris Lorem cupidatat Lorem eiusmod.
-          </Comment>
-          <Comment
-            likes={10}
-            createdAt="Thu Dec 08 2022 13:57:19 GMT+0100 (Central European Standard Time)"
-            id={1}
-          >
-            Irure laboris Lorem cupidatat Lorem eiusmod.
-          </Comment>
-          <Comment
-            likes={10}
-            createdAt="Thu Dec 08 2022 13:57:19 GMT+0100 (Central European Standard Time)"
-            id={1}
-          >
-            Irure laboris Lorem cupidatat Lorem eiusmod.
-          </Comment>
+          {post.comments.map((comment) => {
+            return (
+              <Comment
+                key={comment.id}
+                likes={comment.likes}
+                createdAt={comment.created_at}
+                id={comment.id}
+              >
+                {comment.content}
+              </Comment>
+            );
+          })}
         </ModalBody>
       </ModalContent>
     </Modal>
