@@ -162,15 +162,7 @@ export const Post = ({
           </ReactHashtag>
         </Text>
       </CardBody>
-      <CardFooter
-        justify="space-between"
-        flexWrap="wrap"
-        sx={{
-          "& > button": {
-            minW: "136px",
-          },
-        }}
-      >
+      <CardFooter justify="space-between">
         <Button
           onClick={() => {
             vote({
@@ -187,7 +179,6 @@ export const Post = ({
               },
             });
           }}
-          flex="1"
           variant="ghost"
           leftIcon={<BiLike />}
         >
@@ -197,13 +188,12 @@ export const Post = ({
           onClick={() => {
             onClick(id);
           }}
-          flex="1"
           variant="ghost"
           leftIcon={<BiChat />}
         >
           {comments}
         </Button>
-        <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
+        <Button variant="ghost" leftIcon={<BiShare />}>
           Share
         </Button>
       </CardFooter>
