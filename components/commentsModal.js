@@ -4,15 +4,14 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
   Textarea,
   Divider,
-  Card,
+  Spinner,
 } from "@chakra-ui/react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 import { Post } from "./Post";
 import { Comment } from "./Comment";
@@ -33,7 +32,27 @@ const AddCommentMutation = gql`
   }
 `;
 
-export const CommentsModal = ({ isOpen, onClose }) => {
+export const GetPostQuery = gql`
+  query GetPost($id: Int!) {
+    posts_by_pk(id: $id) {
+      content
+      id
+      likes
+      created_at
+    }
+  }
+`;
+
+export const CommentsModal = ({ isOpen, onClose, postId }) => {
+  const {
+    data: { posts_by_pk: post } = { posts_by_pk: {} },
+    loading: loadingPost,
+  } = useQuery(GetPostQuery, {
+    variables: {
+      id: postId,
+    },
+  });
+
   const [comment, setComment] = useState("");
 
   // const [addPost] = useMutation(AddCommentMutation, {
@@ -69,26 +88,28 @@ export const CommentsModal = ({ isOpen, onClose }) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader></ModalHeader>
+        <ModalHeader />
         <ModalCloseButton />
         <ModalBody>
-          <Post
-            likes={10}
-            onClick={() => {}}
-            createdAt="Thu Dec 08 2022 13:57:19 GMT+0100 (Central European Standard Time)"
-            id={1}
-            headless={true}
-          >
-            Et sint pariatur tempor tempor voluptate quis ea id irure proident
-            ipsum.
-          </Post>
+          {loadingPost ? (
+            <Spinner />
+          ) : (
+            <Post
+              likes={post.likes}
+              onClick={() => {}}
+              createdAt={post.created_at}
+              id={post.id}
+              headless={true}
+            >
+              {post.content}
+            </Post>
+          )}
           <Divider />
           <Textarea
             onChange={(e) => {
               setComment(e.target.value);
             }}
           />
-          <Divider />
           <Comment
             likes={10}
             createdAt="Thu Dec 08 2022 13:57:19 GMT+0100 (Central European Standard Time)"

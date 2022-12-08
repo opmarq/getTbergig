@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -37,6 +38,7 @@ export default function Wall() {
     onOpen: onOpenComment,
     onClose: onCloseComment,
   } = useDisclosure();
+  const [postId, setPostId] = useState();
 
   return (
     <div>
@@ -87,7 +89,10 @@ export default function Wall() {
                       likes={post.likes}
                       id={post.id}
                       key={post.id}
-                      onClick={onOpenComment}
+                      onClick={(id) => {
+                        onOpenComment();
+                        setPostId(id);
+                      }}
                     >
                       {post.content}
                     </Post>
@@ -98,7 +103,11 @@ export default function Wall() {
           </Stack>
         </Container>
         <PostModal isOpen={isOpen} onClose={onClose} />
-        <CommentsModal isOpen={isCommentOpen} onClose={onCloseComment} />
+        <CommentsModal
+          postId={postId}
+          isOpen={isCommentOpen}
+          onClose={onCloseComment}
+        />
       </main>
     </div>
   );
