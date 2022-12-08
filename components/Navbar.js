@@ -27,7 +27,7 @@ export const Nav = () => {
             <Select>
               <option value="clubhouse-maroc">Clubhouse Maroc</option>
               <option value="jmap">JMAP</option>
-              <option value="morocco">Morocco</option>
+              <option value="morocco">Maroc</option>
             </Select>
           </Flex>
           <Button onClick={toggleColorMode}>

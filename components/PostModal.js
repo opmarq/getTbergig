@@ -71,7 +71,7 @@ export const PostModal = ({ isOpen, onClose }) => {
   return (
     <Modal
       size={{
-        xs: "full",
+        base: "full",
         md: "lg",
       }}
       blockScrollOnMount={false}

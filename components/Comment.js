@@ -11,7 +11,6 @@ import {
   IconButton,
   useDisclosure,
   Flex,
-  useColorModeValue,
   Card,
   CardHeader,
   CardBody,
@@ -20,7 +19,7 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ReactHashtag from "react-hashtag";
 import { gql, useMutation } from "@apollo/client";
-import { BiLike, BiChat, BiShare } from "react-icons/bi";
+import { BiLike, BiShare } from "react-icons/bi";
 import { formatRelative } from "date-fns";
 
 import { getPosts } from "../pages";
@@ -46,14 +45,7 @@ const voteMutation = gql`
   }
 `;
 
-export const Post = ({
-  children,
-  likes,
-  id,
-  createdAt,
-  onClick,
-  headless = false,
-}) => {
+export const Comment = ({ children, likes, id, createdAt }) => {
   const [deletePost] = useMutation(deletePostMutation, {
     update: (store, { data: { delete_posts_by_pk } }) => {
       const data = store.readQuery({
@@ -74,12 +66,7 @@ export const Post = ({
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   return (
-    <Card
-      boxShadow={headless ? "none" : "xl"}
-      borderRadius="xl"
-      bg={useColorModeValue("white", "gray.900")}
-      w="full"
-    >
+    <Card bg="transparent" boxShadow="none" borderRadius="xl" w="full">
       <CardHeader>
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -191,16 +178,6 @@ export const Post = ({
           leftIcon={<BiLike />}
         >
           {likes}
-        </Button>
-        <Button
-          onClick={() => {
-            onClick(id);
-          }}
-          flex="1"
-          variant="ghost"
-          leftIcon={<BiChat />}
-        >
-          0
         </Button>
         <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
           Share

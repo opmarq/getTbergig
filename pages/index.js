@@ -14,6 +14,7 @@ import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
 import { PostModal } from "../components/PostModal";
 import { HashTags } from "../components/HashTags";
+import { CommentsModal } from "../components/commentsModal";
 
 export const getPosts = gql`
   query getPosts {
@@ -31,6 +32,11 @@ export default function Wall() {
   const { posts } = dataPosts || { posts: [] };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCommentOpen,
+    onOpen: onOpenComment,
+    onClose: onCloseComment,
+  } = useDisclosure();
 
   return (
     <div>
@@ -76,7 +82,13 @@ export default function Wall() {
               <>
                 {posts.map((post) => {
                   return (
-                    <Post likes={post.likes} id={post.id} key={post.id}>
+                    <Post
+                      createdAt={post.created_at}
+                      likes={post.likes}
+                      id={post.id}
+                      key={post.id}
+                      onClick={onOpenComment}
+                    >
                       {post.content}
                     </Post>
                   );
@@ -86,6 +98,7 @@ export default function Wall() {
           </Stack>
         </Container>
         <PostModal isOpen={isOpen} onClose={onClose} />
+        <CommentsModal isOpen={isCommentOpen} onClose={onCloseComment} />
       </main>
     </div>
   );
