@@ -78,7 +78,7 @@ export const Post = ({
     <Card
       boxShadow={headless ? "none" : "xl"}
       borderRadius="xl"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={headless ? "transparent" : useColorModeValue("white", "gray.900")}
       w="full"
     >
       <CardHeader px={headless ? 0 : 5}>
