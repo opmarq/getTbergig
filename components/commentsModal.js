@@ -12,6 +12,7 @@ import {
   Skeleton,
   useColorModeValue,
   Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
@@ -91,31 +92,14 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
         <ModalHeader>
           <ModalCloseButton />
         </ModalHeader>
-        <ModalBody>
-          {loadingPost ? (
-            <Stack my="5">
-              <Skeleton
-                borderRadius="lg"
-                startColor={useColorModeValue("white", "#3A3B3D")}
-                height="20px"
-              />
-              <Skeleton
-                borderRadius="lg"
-                startColor={useColorModeValue("white", "#3A3B3D")}
-                height="20px"
-              />
-              <Skeleton
-                borderRadius="lg"
-                startColor={useColorModeValue("white", "#3A3B3D")}
-                height="20px"
-              />
-              <Skeleton
-                borderRadius="lg"
-                startColor={useColorModeValue("white", "#3A3B3D")}
-                height="20px"
-              />
+        {loadingPost ? (
+          <ModalBody>
+            <Stack alignItems="center" justifyContent="center" h="16">
+              <Spinner />
             </Stack>
-          ) : (
+          </ModalBody>
+        ) : (
+          <ModalBody>
             <Post
               likes={post.likes}
               onClick={() => {}}
@@ -126,29 +110,29 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
             >
               {post.content}
             </Post>
-          )}
-          <Textarea
-            onChange={(e) => {
-              setComment(e.target.value);
-            }}
-            value={comment}
-          />
-          <Flex my={5} justifyContent="end">
-            <Button onClick={onComment}>Send</Button>
-          </Flex>
-          {post.comments.map((comment) => {
-            return (
-              <Comment
-                key={comment.id}
-                likes={comment.likes}
-                createdAt={comment.created_at}
-                id={comment.id}
-              >
-                {comment.content}
-              </Comment>
-            );
-          })}
-        </ModalBody>
+            <Textarea
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+              value={comment}
+            />
+            <Flex my={5} justifyContent="end">
+              <Button onClick={onComment}>Send</Button>
+            </Flex>
+            {post.comments.map((comment) => {
+              return (
+                <Comment
+                  key={comment.id}
+                  likes={comment.likes}
+                  createdAt={comment.created_at}
+                  id={comment.id}
+                >
+                  {comment.content}
+                </Comment>
+              );
+            })}
+          </ModalBody>
+        )}
       </ModalContent>
     </Modal>
   );
