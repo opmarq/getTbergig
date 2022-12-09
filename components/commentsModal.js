@@ -106,8 +106,9 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader />
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalCloseButton />
+        </ModalHeader>
         <ModalBody>
           {loadingPost ? (
             <Stack my="5">

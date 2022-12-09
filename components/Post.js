@@ -81,7 +81,7 @@ export const Post = ({
       bg={useColorModeValue("white", "gray.900")}
       w="full"
     >
-      <CardHeader>
+      <CardHeader px={headless ? 0 : 5}>
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
@@ -148,7 +148,7 @@ export const Post = ({
           </Popover>
         </Flex>
       </CardHeader>
-      <CardBody>
+      <CardBody px={headless ? 0 : 5}>
         <Text textAlign="left">
           <ReactHashtag
             renderHashtag={(hashtagValue, index) => (
@@ -162,7 +162,7 @@ export const Post = ({
           </ReactHashtag>
         </Text>
       </CardBody>
-      <CardFooter justify="space-between">
+      <CardFooter px={headless ? 0 : 5} justify="space-between">
         <Button
           onClick={() => {
             vote({

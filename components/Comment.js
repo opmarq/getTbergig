@@ -68,7 +68,7 @@ export const Comment = ({ children, likes, id, createdAt }) => {
 
   return (
     <Card bg="transparent" boxShadow="none" borderRadius="xl" w="full">
-      <CardHeader>
+      <CardHeader px="0">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
@@ -135,7 +135,7 @@ export const Comment = ({ children, likes, id, createdAt }) => {
           </Popover>
         </Flex>
       </CardHeader>
-      <CardBody>
+      <CardBody px="0">
         <Text textAlign="left">
           <ReactHashtag
             renderHashtag={(hashtagValue, index) => (
@@ -149,7 +149,7 @@ export const Comment = ({ children, likes, id, createdAt }) => {
           </ReactHashtag>
         </Text>
       </CardBody>
-      <CardFooter justify="space-between">
+      <CardFooter px="0" justify="space-between">
         <Button
           onClick={() => {
             vote({
