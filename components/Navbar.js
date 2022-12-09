@@ -23,12 +23,12 @@ export const Nav = () => {
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Flex alignItems="center" gap="2">
             <Heading size="md">Tbergig</Heading>
-            <span>/</span>
+            {/* <span>/</span>
             <Select>
               <option value="clubhouse-maroc">Clubhouse Maroc</option>
               <option value="jmap">JMAP</option>
               <option value="morocco">Maroc</option>
-            </Select>
+            </Select> */}
           </Flex>
           <Button onClick={toggleColorMode}>
             {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
