@@ -92,7 +92,6 @@ export const PostModal = ({ isOpen, onClose }) => {
         <ModalFooter>
           <Button
             width="full"
-            colorScheme="blue"
             onClick={() => {
               onClose();
               addPost({

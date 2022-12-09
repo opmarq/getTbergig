@@ -16,11 +16,14 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
+  Icon,
+  Heading,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ReactHashtag from "react-hashtag";
 import { gql, useMutation } from "@apollo/client";
 import { BiLike, BiChat, BiShare } from "react-icons/bi";
+import { BsGenderMale, BsGenderFemale } from "react-icons/bs";
 import { formatRelative } from "date-fns";
 
 import { getPosts } from "../pages";
@@ -85,9 +88,15 @@ export const Post = ({
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
-              <Text color="gray">
-                {formatRelative(new Date(createdAt), new Date())}
-              </Text>
+              <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+                <Icon as={BsGenderFemale} boxSize={6} />
+                <Box textAlign="left">
+                  <Heading size="sm">18 years old</Heading>
+                  <Text color="gray">
+                    {formatRelative(new Date(createdAt), new Date())}
+                  </Text>
+                </Box>
+              </Flex>
             </Box>
           </Flex>
           <Popover
