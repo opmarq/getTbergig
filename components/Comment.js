@@ -46,7 +46,6 @@ const voteMutation = gql`
 `;
 
 export const Comment = ({ children, likes, id, createdAt }) => {
-
   const [deletePost] = useMutation(deletePostMutation, {
     update: (store, { data: { delete_posts_by_pk } }) => {
       const data = store.readQuery({
@@ -150,15 +149,7 @@ export const Comment = ({ children, likes, id, createdAt }) => {
           </ReactHashtag>
         </Text>
       </CardBody>
-      <CardFooter
-        justify="space-between"
-        flexWrap="wrap"
-        sx={{
-          "& > button": {
-            minW: "136px",
-          },
-        }}
-      >
+      <CardFooter justify="space-between">
         <Button
           onClick={() => {
             vote({
@@ -175,13 +166,12 @@ export const Comment = ({ children, likes, id, createdAt }) => {
               },
             });
           }}
-          flex="1"
           variant="ghost"
           leftIcon={<BiLike />}
         >
           {likes}
         </Button>
-        <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
+        <Button variant="ghost" leftIcon={<BiShare />}>
           Share
         </Button>
       </CardFooter>

@@ -8,10 +8,10 @@ import {
   ModalCloseButton,
   Button,
   Textarea,
-  Divider,
   Stack,
   Skeleton,
   useColorModeValue,
+  Flex,
 } from "@chakra-ui/react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
@@ -63,14 +63,16 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
     onCompleted() {
       setComment("");
     },
-    update(cache, { data: { insert_posts_one } }) {
+    update(cache, { data: { insert_comments_one } }) {
+      console.log(insert_comments_one);
       cache.modify({
         fields: {
           comments(existingComments = []) {
+            console.log(existingComments);
             const newCommentsRef = cache.writeFragment({
-              data: insert_posts_one,
+              data: insert_comments_one,
               fragment: gql`
-                fragment NewPost on Comment {
+                fragment NewComment on Comment {
                   id
                   content
                 }
@@ -83,16 +85,13 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
     },
   });
 
-  const onEnterPress = (e) => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
-      e.preventDefault();
-      addComment({
-        variables: {
-          content: comment,
-          post_id: postId,
-        },
-      });
-    }
+  const onComment = (e) => {
+    addComment({
+      variables: {
+        content: comment,
+        post_id: postId,
+      },
+    });
   };
 
   return (
@@ -140,17 +139,20 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
               createdAt={post.created_at}
               id={post.id}
               headless={true}
+              comments={post.comments.length}
             >
               {post.content}
             </Post>
           )}
-          <Divider />
           <Textarea
             onChange={(e) => {
               setComment(e.target.value);
             }}
-            onKeyDown={onEnterPress}
+            value={comment}
           />
+          <Flex my={5} justifyContent="end">
+            <Button onClick={onComment}>Send</Button>
+          </Flex>
           {post.comments.map((comment) => {
             return (
               <Comment
