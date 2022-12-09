@@ -19,7 +19,7 @@ import { CommentsModal } from "../components/commentsModal";
 
 export const getPosts = gql`
   query getPosts {
-    posts {
+    posts(order_by: { created_at: desc }) {
       comments {
         content
         likes

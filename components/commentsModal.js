@@ -33,7 +33,7 @@ const AddCommentMutation = gql`
 export const GetPostQuery = gql`
   query GetPost($id: Int!) {
     posts_by_pk(id: $id) {
-      comments {
+      comments(order_by: { created_at: desc }) {
         content
         likes
         id
