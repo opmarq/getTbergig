@@ -51,6 +51,7 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
   const {
     data: { posts_by_pk: post } = { posts_by_pk: { comments: [] } },
     loading: loadingPost,
+    refetch,
   } = useQuery(GetPostQuery, {
     variables: {
       id: postId,
@@ -62,26 +63,7 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
   const [addComment] = useMutation(AddCommentMutation, {
     onCompleted() {
       setComment("");
-    },
-    update(cache, { data: { insert_comments_one } }) {
-      console.log(insert_comments_one);
-      cache.modify({
-        fields: {
-          comments(existingComments = []) {
-            console.log(existingComments);
-            const newCommentsRef = cache.writeFragment({
-              data: insert_comments_one,
-              fragment: gql`
-                fragment NewComment on Comment {
-                  id
-                  content
-                }
-              `,
-            });
-            return [...existingComments, newCommentsRef];
-          },
-        },
-      });
+      refetch();
     },
   });
 
