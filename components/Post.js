@@ -170,7 +170,9 @@ export const Post = ({
                   },
                 }}
               >
-                {hashtagValue}
+                <Box as="span" color="blue.200">
+                  {hashtagValue}
+                </Box>
               </Link>
             )}
           >
