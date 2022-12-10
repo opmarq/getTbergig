@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { BiHash } from "react-icons/bi";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
@@ -123,26 +125,37 @@ export default function Wall() {
             mb="5"
             borderRadius="xl"
             p="10px"
+            px="15px"
             boxShadow={"lg"}
             bg={useColorModeValue("white", "gray.900")}
-            gap={2}
+            justifyContent="space-between"
           >
+            <Flex gap={2}>
+              <Button
+                borderRadius="none"
+                variant="ghost"
+                textAlign="center"
+                minW="70px"
+                borderBottom="1px"
+              >
+                New
+              </Button>
+              <Button
+                borderRadius="none"
+                variant="ghost"
+                textAlign="center"
+                minW="70px"
+              >
+                Hot
+              </Button>
+            </Flex>
             <Button
-              borderRadius="none"
-              variant="ghost"
-              textAlign="center"
-              minW="70px"
-              borderBottom="1px"
+              justifyContent="left"
+              minW="100px"
+              leftIcon={<BiHash />}
+              rightIcon={<ChevronDownIcon />}
             >
-              New
-            </Button>
-            <Button
-              borderRadius="none"
-              variant="ghost"
-              textAlign="center"
-              minW="70px"
-            >
-              Hot
+              All
             </Button>
           </Flex>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
