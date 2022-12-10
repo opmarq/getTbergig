@@ -81,6 +81,12 @@ export default function Wall() {
     onClose: onCloseComment,
   } = useDisclosure();
 
+  const {
+    isOpen: isHashTagOpen,
+    onOpen: onHashTagOpen,
+    onClose: onHashTagClose,
+  } = useDisclosure();
+
   const [postId, setPostId] = useState();
 
   const dataPosts = dataAllPosts || dataHashPosts;
@@ -120,9 +126,8 @@ export default function Wall() {
               </Box>
             </Box>
           </Stack>
-          <HashTags />
           <Flex
-            mb="5"
+            my="5"
             borderRadius="xl"
             p="10px"
             px="15px"
@@ -154,8 +159,9 @@ export default function Wall() {
               minW="100px"
               leftIcon={<BiHash />}
               rightIcon={<ChevronDownIcon />}
+              onClick={onHashTagOpen}
             >
-              All
+              {query.h ? query.h : "All"}
             </Button>
           </Flex>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
@@ -195,6 +201,7 @@ export default function Wall() {
           isOpen={isCommentOpen}
           onClose={onCloseComment}
         />
+        <HashTags isOpen={isHashTagOpen} onClose={onHashTagClose} />
       </main>
     </div>
   );

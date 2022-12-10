@@ -77,7 +77,6 @@ export const PostModal = ({ isOpen, onClose }) => {
         base: "full",
         md: "3xl",
       }}
-      blockScrollOnMount={false}
       isOpen={isOpen}
       onClose={onClose}
     >
