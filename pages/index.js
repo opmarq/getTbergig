@@ -8,6 +8,8 @@ import {
   useDisclosure,
   Text,
   useColorModeValue,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -117,6 +119,32 @@ export default function Wall() {
             </Box>
           </Stack>
           <HashTags />
+          <Flex
+            mb="5"
+            borderRadius="xl"
+            p="10px"
+            boxShadow={"lg"}
+            bg={useColorModeValue("white", "gray.900")}
+            gap={2}
+          >
+            <Button
+              borderRadius="none"
+              variant="ghost"
+              textAlign="center"
+              minW="70px"
+              borderBottom="1px"
+            >
+              New
+            </Button>
+            <Button
+              borderRadius="none"
+              variant="ghost"
+              textAlign="center"
+              minW="70px"
+            >
+              Hot
+            </Button>
+          </Flex>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
             {posts.length === 0 && !loadingPosts && (
               <Text>No tbergig yet!</Text>
