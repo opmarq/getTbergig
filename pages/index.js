@@ -23,8 +23,8 @@ import { HashTags } from "../components/HashTags";
 import { CommentsModal } from "../components/commentsModal";
 
 export const getPosts = gql`
-  query getPosts {
-    posts(order_by: { created_at: desc }) {
+  query getPosts($order_by: [posts_order_by!] = { created_at: desc }) {
+    posts(order_by: $order_by) {
       comments {
         content
         likes
@@ -38,6 +38,9 @@ export const getPosts = gql`
     }
   }
 `;
+
+// order_by: {likes: $likes}
+// { created_at: desc }
 
 const getPostsByHashTag = gql`
   query getPostsByHashtag($_eq: String) {
@@ -61,9 +64,16 @@ const getPostsByHashTag = gql`
 
 export default function Wall() {
   const { query } = useRouter();
+  const [activeTab, setActiveTab] = useState("new");
+
   const { data: dataAllPosts, loading: loadingAllPosts } = useQuery(getPosts, {
     skip: !!query.h,
+    variables: {
+      order_by:
+        activeTab === "new" ? { created_at: "desc" } : { likes: "desc" },
+    },
   });
+
   const { data: dataHashPosts, loading: loadingHashPosts } = useQuery(
     getPostsByHashTag,
     {
@@ -73,6 +83,7 @@ export default function Wall() {
       },
     }
   );
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
@@ -141,7 +152,10 @@ export default function Wall() {
                 variant="ghost"
                 textAlign="center"
                 minW="70px"
-                borderBottom="1px"
+                borderBottom={activeTab === "new" ? "1px" : "none"}
+                onClick={() => {
+                  setActiveTab("new");
+                }}
               >
                 New
               </Button>
@@ -150,6 +164,10 @@ export default function Wall() {
                 variant="ghost"
                 textAlign="center"
                 minW="70px"
+                borderBottom={activeTab === "hot" ? "1px" : "none"}
+                onClick={() => {
+                  setActiveTab("hot");
+                }}
               >
                 Hot
               </Button>
