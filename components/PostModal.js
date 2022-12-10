@@ -31,7 +31,10 @@ const addPostMutation = gql`
 export const PostModal = ({ isOpen, onClose }) => {
   const [post, setPost] = useState("");
 
-  const hashTags = post.split(/[\s\n\r]/gim).filter((v) => v.startsWith("#"));
+  const hashTags = post
+    .split(/[\s\n\r]/gim)
+    .filter((v) => v.startsWith("#"))
+    .map((v) => v.substring(1, v.length));
 
   const [addPost] = useMutation(addPostMutation, {
     update(cache, { data: { insert_posts_one } }) {

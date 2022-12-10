@@ -160,12 +160,19 @@ export const Post = ({
       <CardBody px={headless ? 0 : 5}>
         <Text textAlign="left">
           <ReactHashtag
-            renderHashtag={(hashtagValue, index) => (
-              <Link key={index} href={hashtagValue}>
+            renderHashtag={(hashtagValue) => (
+              <Link
+                key={hashtagValue}
+                href={{
+                  pathname: "/",
+                  query: {
+                    h: hashtagValue.substring(1, hashtagValue.length),
+                  },
+                }}
+              >
                 {hashtagValue}
               </Link>
             )}
-            onHashtagClick={(val) => console.log(val)}
           >
             {children}
           </ReactHashtag>

@@ -10,6 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 
 import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
@@ -34,9 +35,40 @@ export const getPosts = gql`
   }
 `;
 
+const getPostsByHashTag = gql`
+  query getPostsByHashtag($_eq: String) {
+    posts(
+      order_by: { created_at: desc }
+      where: { post_hashtags: { hashtag: { name: { _eq: $_eq } } } }
+    ) {
+      comments {
+        content
+        likes
+        id
+        created_at
+      }
+      content
+      likes
+      id
+      created_at
+    }
+  }
+`;
+
 export default function Wall() {
-  const { data: dataPosts, loading: loadingPosts } = useQuery(getPosts);
-  const { posts } = dataPosts || { posts: [] };
+  const { query } = useRouter();
+  const { data: dataAllPosts, loading: loadingAllPosts } = useQuery(getPosts, {
+    skip: !!query.h,
+  });
+  const { data: dataHashPosts, loading: loadingHashPosts } = useQuery(
+    getPostsByHashTag,
+    {
+      skip: !query.h,
+      variables: {
+        _eq: query.h,
+      },
+    }
+  );
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
@@ -46,6 +78,12 @@ export default function Wall() {
   } = useDisclosure();
 
   const [postId, setPostId] = useState();
+
+  const dataPosts = dataAllPosts || dataHashPosts;
+
+  const loadingPosts = loadingAllPosts || loadingHashPosts;
+
+  const { posts } = dataPosts || { posts: [] };
 
   return (
     <div>
