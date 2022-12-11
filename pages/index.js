@@ -95,7 +95,7 @@ export default function Wall() {
   return (
     <div>
       <Head>
-        <title>Tbergig</title>
+        <title>Tbergig, The front page of Morocco</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
