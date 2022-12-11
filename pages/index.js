@@ -23,8 +23,11 @@ import { HashTags } from "../components/HashTags";
 import { CommentsModal } from "../components/commentsModal";
 
 export const getPosts = gql`
-  query getPosts($order_by: [posts_order_by!] = { created_at: desc }) {
-    posts(order_by: $order_by) {
+  query getPosts(
+    $order_by: [posts_order_by!] = { created_at: desc }
+    $where: posts_bool_exp
+  ) {
+    posts(order_by: $order_by, where: $where) {
       comments {
         content
         likes
@@ -38,9 +41,6 @@ export const getPosts = gql`
     }
   }
 `;
-
-// order_by: {likes: $likes}
-// { created_at: desc }
 
 const getPostsByHashTag = gql`
   query getPostsByHashtag($_eq: String) {
@@ -66,23 +66,15 @@ export default function Wall() {
   const { query } = useRouter();
   const [activeTab, setActiveTab] = useState("new");
 
-  const { data: dataAllPosts, loading: loadingAllPosts } = useQuery(getPosts, {
-    skip: !!query.h,
+  const { data: { posts } = { posts: [] }, loading } = useQuery(getPosts, {
     variables: {
       order_by:
         activeTab === "new" ? { created_at: "desc" } : { likes: "desc" },
+      where: !!query.h
+        ? { post_hashtags: { hashtag: { name: { _eq: query.h } } } }
+        : null,
     },
   });
-
-  const { data: dataHashPosts, loading: loadingHashPosts } = useQuery(
-    getPostsByHashTag,
-    {
-      skip: !query.h,
-      variables: {
-        _eq: query.h,
-      },
-    }
-  );
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -99,12 +91,6 @@ export default function Wall() {
   } = useDisclosure();
 
   const [postId, setPostId] = useState();
-
-  const dataPosts = dataAllPosts || dataHashPosts;
-
-  const loadingPosts = loadingAllPosts || loadingHashPosts;
-
-  const { posts } = dataPosts || { posts: [] };
 
   return (
     <div>
@@ -183,10 +169,8 @@ export default function Wall() {
             </Button>
           </Flex>
           <Stack as={Box} spacing="24px" textAlign={"center"}>
-            {posts.length === 0 && !loadingPosts && (
-              <Text>No tbergig yet!</Text>
-            )}
-            {loadingPosts ? (
+            {posts.length === 0 && !loading && <Text>No tbergig yet!</Text>}
+            {loading ? (
               <Box p="5">
                 <Spinner />
               </Box>

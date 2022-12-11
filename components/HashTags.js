@@ -39,7 +39,7 @@ export const HashTags = ({ isOpen, onClose }) => {
               onClick={onClose}
             >
               <Button px={2} py={1} fontWeight={"400"} size="sm">
-                all
+                All
               </Button>
             </Link>
             {hashtags.map(({ name }, index) => {
