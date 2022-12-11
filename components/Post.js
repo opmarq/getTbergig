@@ -56,6 +56,8 @@ export const Post = ({
   createdAt,
   onClick,
   comments,
+  age,
+  gender,
   headless = false,
 }) => {
   const [deletePost] = useMutation(deletePostMutation, {
@@ -89,9 +91,10 @@ export const Post = ({
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
               <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                <Icon as={BsGenderFemale} boxSize={6} />
+                {gender === "man" && <Icon as={BsGenderFemale} boxSize={6} />}
+                {gender === "woman" && <Icon as={BsGenderMale} boxSize={6} />}
                 <Box textAlign="left">
-                  <Heading size="sm">18 years old</Heading>
+                  <Heading size="sm">{age} years old</Heading>
                   <Text color="gray">
                     {formatRelative(new Date(createdAt), new Date())}
                   </Text>

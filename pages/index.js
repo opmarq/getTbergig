@@ -38,26 +38,8 @@ export const getPosts = gql`
       likes
       id
       created_at
-    }
-  }
-`;
-
-const getPostsByHashTag = gql`
-  query getPostsByHashtag($_eq: String) {
-    posts(
-      order_by: { created_at: desc }
-      where: { post_hashtags: { hashtag: { name: { _eq: $_eq } } } }
-    ) {
-      comments {
-        content
-        likes
-        id
-        created_at
-      }
-      content
-      likes
-      id
-      created_at
+      age
+      gender
     }
   }
 `;
@@ -183,6 +165,8 @@ export default function Wall() {
                       likes={post.likes}
                       comments={post.comments.length}
                       id={post.id}
+                      age={post.age}
+                      gender={post.gender}
                       key={post.id}
                       onClick={(id) => {
                         onOpenComment();

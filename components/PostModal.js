@@ -27,20 +27,31 @@ const addPostMutation = gql`
   mutation AddPost(
     $content: String = ""
     $data: [post_hashtag_insert_input!] = {}
+    $age: Int
+    $gender: String
   ) {
     insert_posts_one(
-      object: { content: $content, post_hashtags: { data: $data } }
+      object: {
+        content: $content
+        post_hashtags: { data: $data }
+        age: $age
+        gender: $gender
+      }
     ) {
       content
       likes
       id
       created_at
+      age
+      gender
     }
   }
 `;
 
 export const PostModal = ({ isOpen, onClose }) => {
   const [post, setPost] = useState("");
+  const [gender, setGender] = useState("man");
+  const [age, setAge] = useState();
 
   const hashTags = post
     .split(/[\s\n\r]/gim)
@@ -58,6 +69,8 @@ export const PostModal = ({ isOpen, onClose }) => {
                 fragment NewPost on Post {
                   id
                   content
+                  age
+                  gender
                 }
               `,
             });
@@ -105,7 +118,7 @@ export const PostModal = ({ isOpen, onClose }) => {
           <Flex mt="20px" gap="20px">
             <FormControl w="200px">
               <FormLabel>Age</FormLabel>
-              <NumberInput min={10}>
+              <NumberInput value={age} onChange={setAge} min={10}>
                 <NumberInputField />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
@@ -115,10 +128,14 @@ export const PostModal = ({ isOpen, onClose }) => {
             </FormControl>
             <FormControl alignItems="center" display="flex" as="fieldset">
               <FormLabel as="legend">Sex</FormLabel>
-              <RadioGroup defaultValue="Itachi">
+              <RadioGroup
+                value={gender}
+                onChange={setGender}
+                defaultValue="man"
+              >
                 <HStack spacing="24px">
-                  <Radio value="Sasuke">Man</Radio>
-                  <Radio value="Nagato">Woman</Radio>
+                  <Radio value="man">Man</Radio>
+                  <Radio value="woman">Woman</Radio>
                 </HStack>
               </RadioGroup>
             </FormControl>
@@ -130,11 +147,13 @@ export const PostModal = ({ isOpen, onClose }) => {
             onClick={() => {
               onClose();
               addPost({
-                variables: { content: post, data: hashs },
+                variables: { content: post, data: hashs, age, gender: gender },
                 optimisticResponse: {
                   insert_posts_one: {
                     __typename: "posts",
                     content: post,
+                    age: age,
+                    gender: gender,
                     likes: 0,
                     id: 111,
                     created_at: "2022-11-19T17:55:56.960641+00:00",
