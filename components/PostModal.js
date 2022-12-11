@@ -9,6 +9,17 @@ import {
   ModalCloseButton,
   Button,
   Textarea,
+  FormControl,
+  FormLabel,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  RadioGroup,
+  Radio,
+  HStack,
+  Flex,
 } from "@chakra-ui/react";
 import { gql, useMutation } from "@apollo/client";
 
@@ -89,7 +100,29 @@ export const PostModal = ({ isOpen, onClose }) => {
             onChange={(e) => {
               setPost(e.target.value);
             }}
+            rows={6}
           />
+          <Flex mt="20px" gap="20px">
+            <FormControl w="200px">
+              <FormLabel>Age</FormLabel>
+              <NumberInput min={10}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            <FormControl alignItems="center" display="flex" as="fieldset">
+              <FormLabel as="legend">Sex</FormLabel>
+              <RadioGroup defaultValue="Itachi">
+                <HStack spacing="24px">
+                  <Radio value="Sasuke">Man</Radio>
+                  <Radio value="Nagato">Woman</Radio>
+                </HStack>
+              </RadioGroup>
+            </FormControl>
+          </Flex>
         </ModalBody>
         <ModalFooter>
           <Button
