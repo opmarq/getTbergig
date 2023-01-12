@@ -122,7 +122,7 @@ export const Post = ({
               <PopoverArrow />
               <PopoverBody>
                 <Stack>
-                  <Button
+                  {/* <Button
                     w="194px"
                     variant="ghost"
                     justifyContent="space-between"
@@ -143,7 +143,7 @@ export const Post = ({
                     }}
                   >
                     Delete
-                  </Button>
+                  </Button> */}
                   <Button
                     w="194px"
                     variant="ghost"

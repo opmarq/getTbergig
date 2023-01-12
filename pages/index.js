@@ -170,7 +170,7 @@ export default function Wall() {
               dataLength={posts.length}
               next={() => {
                 const currentLength = posts.length;
-                fetchMore({
+                return fetchMore({
                   variables: {
                     offset: currentLength,
                     limit: currentLength + 3,
@@ -184,6 +184,8 @@ export default function Wall() {
                         }
                       : null,
                   },
+                }).then(({ data }) => {
+                  setHasMore(data.posts.length !== 0);
                 });
               }}
               hasMore={hasMore}
