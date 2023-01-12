@@ -10,11 +10,14 @@ import {
   useColorModeValue,
   Flex,
   Button,
+  Skeleton,
+  Card,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { BiHash } from "react-icons/bi";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import { Post } from "../components/Post";
 import { Nav } from "../components/Navbar";
@@ -24,10 +27,12 @@ import { CommentsModal } from "../components/commentsModal";
 
 export const getPosts = gql`
   query getPosts(
-    $order_by: [posts_order_by!] = { created_at: desc }
+    $limit: Int = 3
+    $offset: Int = 0
+    $order_by: [posts_order_by!] = { id: desc }
     $where: posts_bool_exp
   ) {
-    posts(order_by: $order_by, where: $where) {
+    posts(limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
       comments {
         content
         likes
@@ -48,10 +53,14 @@ export default function Wall() {
   const { query } = useRouter();
   const [activeTab, setActiveTab] = useState("new");
 
-  const { data: { posts } = { posts: [] }, loading } = useQuery(getPosts, {
+  const {
+    data: { posts } = { posts: [] },
+    error,
+    loading,
+    fetchMore,
+  } = useQuery(getPosts, {
     variables: {
-      order_by:
-        activeTab === "new" ? { created_at: "desc" } : { likes: "desc" },
+      order_by: activeTab === "new" ? { id: "desc" } : { likes: "desc" },
       where: !!query.h
         ? { post_hashtags: { hashtag: { name: { _eq: query.h } } } }
         : null,
@@ -59,6 +68,7 @@ export default function Wall() {
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [hasMore, setHasMore] = useState(true);
 
   const {
     isOpen: isCommentOpen,
@@ -150,14 +160,53 @@ export default function Wall() {
               {query.h ? query.h : "All"}
             </Button>
           </Flex>
-          <Stack as={Box} spacing="24px" textAlign={"center"}>
-            {posts.length === 0 && !loading && <Text>No tbergig yet!</Text>}
-            {loading ? (
-              <Box p="5">
-                <Spinner />
-              </Box>
-            ) : (
-              <>
+          {posts.length === 0 && !loading && <Text>No tbergig yet!</Text>}
+          {loading ? (
+            <Box textAlign="center" p="5">
+              <Spinner />
+            </Box>
+          ) : (
+            <InfiniteScroll
+              dataLength={posts.length}
+              next={() => {
+                const currentLength = posts.length;
+                fetchMore({
+                  variables: {
+                    offset: currentLength,
+                    limit: currentLength + 3,
+                    order_by:
+                      activeTab === "new" ? { id: "desc" } : { likes: "desc" },
+                    where: !!query.h
+                      ? {
+                          post_hashtags: {
+                            hashtag: { name: { _eq: query.h } },
+                          },
+                        }
+                      : null,
+                  },
+                });
+              }}
+              hasMore={hasMore}
+              loader={
+                <Card
+                  boxShadow="xl"
+                  borderRadius="xl"
+                  bg={useColorModeValue("white", "gray.900")}
+                  w="full"
+                  mt="24px"
+                  p="5"
+                >
+                  <Stack>
+                    <Skeleton borderRadius="xl" height="20px" />
+                    <Skeleton borderRadius="xl" height="20px" />
+                    <Skeleton borderRadius="xl" height="20px" />
+                    <Skeleton borderRadius="xl" height="20px" />
+                    <Skeleton borderRadius="xl" height="20px" />
+                  </Stack>
+                </Card>
+              }
+            >
+              <Stack as={Box} spacing="24px" textAlign={"center"}>
                 {posts.map((post) => {
                   return (
                     <Post
@@ -177,9 +226,9 @@ export default function Wall() {
                     </Post>
                   );
                 })}
-              </>
-            )}
-          </Stack>
+              </Stack>
+            </InfiniteScroll>
+          )}
         </Container>
         <PostModal isOpen={isOpen} onClose={onClose} />
         <CommentsModal

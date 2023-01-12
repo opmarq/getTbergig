@@ -114,6 +114,7 @@ export const PostModal = ({ isOpen, onClose }) => {
               setPost(e.target.value);
             }}
             rows={6}
+            autoFocus
           />
           <Flex mt="20px" gap="20px">
             <FormControl w="200px">
