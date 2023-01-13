@@ -132,6 +132,7 @@ export default function Wall() {
                 minW="70px"
                 borderBottom={activeTab === "new" ? "1px" : "none"}
                 onClick={() => {
+                  setHasMore(true);
                   setActiveTab("new");
                 }}
               >
@@ -144,6 +145,7 @@ export default function Wall() {
                 minW="70px"
                 borderBottom={activeTab === "hot" ? "1px" : "none"}
                 onClick={() => {
+                  setHasMore(true);
                   setActiveTab("hot");
                 }}
               >
@@ -170,6 +172,7 @@ export default function Wall() {
               dataLength={posts.length}
               next={() => {
                 const currentLength = posts.length;
+                console.log(currentLength);
                 return fetchMore({
                   variables: {
                     offset: currentLength,
