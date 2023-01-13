@@ -100,6 +100,8 @@ export default function Wall() {
               px="15px"
               boxShadow={"lg"}
               bg={useColorModeValue("white", "gray.900")}
+              border="1px"
+              borderColor={useColorModeValue("black", "transparent")}
             >
               <Box
                 borderRadius="2xl"
@@ -123,6 +125,8 @@ export default function Wall() {
             boxShadow={"lg"}
             bg={useColorModeValue("white", "gray.900")}
             justifyContent="space-between"
+            border="1px"
+            borderColor={useColorModeValue("black", "transparent")}
           >
             <Flex gap={2}>
               <Button
@@ -200,6 +204,8 @@ export default function Wall() {
                   w="full"
                   mt="24px"
                   p="5"
+                  border="1px"
+                  borderColor={useColorModeValue("black", "transparent")}
                 >
                   <Stack>
                     <Skeleton borderRadius="xl" height="20px" />

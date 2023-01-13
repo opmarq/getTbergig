@@ -85,6 +85,10 @@ export const Post = ({
       borderRadius="xl"
       bg={headless ? "transparent" : useColorModeValue("white", "gray.900")}
       w="full"
+      border="1px"
+      borderColor={
+        headless ? "transparent" : useColorModeValue("black", "transparent")
+      }
     >
       <CardHeader px={headless ? 0 : 5}>
         <Flex spacing="4">
