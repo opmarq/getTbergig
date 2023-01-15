@@ -79,6 +79,21 @@ export const Post = ({
 
   const { onOpen, onClose, isOpen } = useDisclosure();
 
+  const onShare = async () => {
+    const shareData = {
+      title: "Aji tchof had tbergiga!",
+      text: `${children}`.substring(0, 15) + "...",
+      url: `${window.location}?p=${id}`,
+    };
+
+    try {
+      await navigator.share(shareData);
+      resultPara.textContent = "tbergiga is shared successfully";
+    } catch (err) {
+      resultPara.textContent = `Error: ${err}`;
+    }
+  };
+
   return (
     <Card
       boxShadow={headless ? "none" : "xl"}
@@ -218,7 +233,7 @@ export const Post = ({
         >
           {comments}
         </Button>
-        <Button variant="ghost" leftIcon={<BiShare />}>
+        <Button onClick={onShare} variant="ghost" leftIcon={<BiShare />}>
           Share
         </Button>
       </CardFooter>

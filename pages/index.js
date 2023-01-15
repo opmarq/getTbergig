@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -52,6 +52,10 @@ export const getPosts = gql`
 export default function Wall() {
   const { query } = useRouter();
   const [activeTab, setActiveTab] = useState("new");
+  const {
+    query: { p: urlPostId },
+    push,
+  } = useRouter();
 
   const {
     data: { posts } = { posts: [] },
@@ -69,12 +73,13 @@ export default function Wall() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [hasMore, setHasMore] = useState(true);
+  const [postId, setPostId] = useState();
 
   const {
     isOpen: isCommentOpen,
     onOpen: onOpenComment,
     onClose: onCloseComment,
-  } = useDisclosure();
+  } = useDisclosure({ isOpen: !!urlPostId });
 
   const {
     isOpen: isHashTagOpen,
@@ -82,7 +87,9 @@ export default function Wall() {
     onClose: onHashTagClose,
   } = useDisclosure();
 
-  const [postId, setPostId] = useState();
+  useEffect(() => {
+    setPostId(urlPostId);
+  }, [urlPostId]);
 
   return (
     <div>
@@ -176,7 +183,6 @@ export default function Wall() {
               dataLength={posts.length}
               next={() => {
                 const currentLength = posts.length;
-                console.log(currentLength);
                 return fetchMore({
                   variables: {
                     offset: currentLength,
@@ -230,6 +236,11 @@ export default function Wall() {
                       key={post.id}
                       onClick={(id) => {
                         onOpenComment();
+                        push({
+                          query: {
+                            p: id,
+                          },
+                        });
                         setPostId(id);
                       }}
                     >
@@ -242,11 +253,16 @@ export default function Wall() {
           )}
         </Container>
         <PostModal isOpen={isOpen} onClose={onClose} />
-        <CommentsModal
-          postId={postId}
-          isOpen={isCommentOpen}
-          onClose={onCloseComment}
-        />
+        {postId && (
+          <CommentsModal
+            postId={postId}
+            isOpen={isCommentOpen}
+            onClose={() => {
+              push("/");
+              onCloseComment();
+            }}
+          />
+        )}
         <HashTags isOpen={isHashTagOpen} onClose={onHashTagClose} />
       </main>
     </div>
