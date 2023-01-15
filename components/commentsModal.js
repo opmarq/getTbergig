@@ -83,7 +83,6 @@ export const CommentsModal = ({ isOpen, onClose, postId }) => {
         base: "full",
         md: "3xl",
       }}
-      blockScrollOnMount={false}
       isOpen={isOpen}
       onClose={onClose}
     >
