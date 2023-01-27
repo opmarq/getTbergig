@@ -28,6 +28,8 @@ import { formatRelative } from "date-fns";
 
 import { getPosts } from "../pages";
 import Link from "next/link";
+import { ShareContext } from "../hooks/useShare";
+import { useContext } from "react";
 
 const deletePostMutation = gql`
   mutation DeletePost($id: Int!) {
@@ -78,21 +80,7 @@ export const Post = ({
   const [vote] = useMutation(voteMutation);
 
   const { onOpen, onClose, isOpen } = useDisclosure();
-
-  const onShare = async () => {
-    const shareData = {
-      title: "Aji tchof had tbergiga!",
-      text: `${children}`.substring(0, 15) + "...",
-      url: `${window.location}?p=${id}`,
-    };
-
-    try {
-      await navigator.share(shareData);
-      resultPara.textContent = "tbergiga is shared successfully";
-    } catch (err) {
-      resultPara.textContent = `Error: ${err}`;
-    }
-  };
+  const { share } = useContext(ShareContext);
 
   return (
     <Card
@@ -233,7 +221,7 @@ export const Post = ({
         >
           {comments}
         </Button>
-        <Button onClick={onShare} variant="ghost" leftIcon={<BiShare />}>
+        <Button onClick={share} variant="ghost" leftIcon={<BiShare />}>
           Share
         </Button>
       </CardFooter>

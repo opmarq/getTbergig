@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 import { createApolloClient } from "../utils/apollo-client";
 import { PostsProvider } from "../components/PostsContext";
+import { ShareProvider } from "../hooks/useShare";
 import theme from "../theme";
 
 const client = createApolloClient();
@@ -13,11 +14,13 @@ function MyApp({ Component, pageProps }) {
     <>
       <Analytics />
       <ChakraProvider theme={theme}>
-        <PostsProvider>
-          <ApolloProvider client={client}>
-            <Component {...pageProps} />
-          </ApolloProvider>
-        </PostsProvider>
+        <ShareProvider>
+          <PostsProvider>
+            <ApolloProvider client={client}>
+              <Component {...pageProps} />
+            </ApolloProvider>
+          </PostsProvider>
+        </ShareProvider>
       </ChakraProvider>
     </>
   );

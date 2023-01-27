@@ -1,27 +1,35 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
+import { useDisclosure } from "@chakra-ui/react";
+
 import { ShareModal } from "../components/ShareModal";
 
-const ShareContext = createContext({ share: () => {} });
+export const ShareContext = createContext({ share: () => {} });
 
-export const shareProvider = ({ children }) => {
+export const ShareProvider = ({ children }) => {
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
   const share = async (id) => {
-    const shareData = {
-      title: "Aji tchof had tbergiga!",
-      text: `${children}`.substring(0, 15) + "...",
-      url: `${window.location}?p=${id}`,
-    };
+    if (navigator?.share) {
+      const shareData = {
+        title: "Aji tchof had tbergiga!",
+        text: `${children}`.substring(0, 15) + "...",
+        url: `${window.location}?p=${id}`,
+      };
 
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      console.log("Error");
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log("Error");
+      }
+    } else {
+      onOpen();
     }
   };
 
   return (
     <ShareContext.Provider value={{ share }}>
       {children}
-      <ShareModal />
+      <ShareModal isOpen={isOpen} onClose={onClose} />
     </ShareContext.Provider>
   );
 };
