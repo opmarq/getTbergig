@@ -221,7 +221,13 @@ export const Post = ({
         >
           {comments}
         </Button>
-        <Button onClick={share} variant="ghost" leftIcon={<BiShare />}>
+        <Button
+          onClick={() => {
+            share(id);
+          }}
+          variant="ghost"
+          leftIcon={<BiShare />}
+        >
           Share
         </Button>
       </CardFooter>

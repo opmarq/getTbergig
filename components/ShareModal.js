@@ -12,14 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-export const ShareModal = ({ isOpen, onClose }) => {
-  const { onCopy, hasCopied, setValue } = useClipboard("");
-  const [location, setLocation] = useState("");
-
-  useEffect(() => {
-    setLocation(window.location.href);
-    setValue(window.location.href);
-  }, []);
+export const ShareModal = ({ isOpen, onClose, url }) => {
+  const { onCopy, hasCopied } = useClipboard(url);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -29,7 +23,7 @@ export const ShareModal = ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <ModalBody>
           <Flex m="5">
-            <Input value={location} mr={2} readOnly />
+            <Input value={url} mr={2} readOnly />
             <Button onClick={onCopy}>{hasCopied ? "Copied!" : "Copy"}</Button>
           </Flex>
         </ModalBody>
